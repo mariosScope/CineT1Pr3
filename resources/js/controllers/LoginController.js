@@ -10,7 +10,7 @@ var LoginController = function($scope, $location) {
 
         if (!angular.isUndefined($scope.email.text) && $scope.password.text.length > 0) {
             console.log($scope.email.text + ' | ( ͡° ͜ʖ ͡°) | ' + $scope.password.text);
-            window.location.href = "movies.html";
+            window.location.href = "selectMovie.html";
         }
 
     };
