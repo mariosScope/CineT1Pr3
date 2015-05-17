@@ -1,0 +1,81 @@
+<html xmlns:ng="http://angularjs.org" id="ng-app" class="ng-app:CineApp" ng-app="CineApp">
+  <head>
+    <title>Videos</title>
+    <meta charset="UTF-8">
+    
+    <link href="resources/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="resources/js/lib/jquery/jquery-1.8.2.js"></script>
+    <link href="resources/css/style.css" rel="stylesheet"/>
+    <script src="resources/js/lib/angular/angular.js" ng:autobind></script>
+    <script src="resources/js/app.js"></script>
+    <script src="resources/js/services.js"></script>
+    <script src="resources/js/controllers/SeatController.js"></script>
+
+  </head>
+    <body>
+        <div class="container cinema-room">
+            <div class="row">
+                <div class="card">
+                    <div class="row" ng-controller="SeatController">
+                        <div class="col-md-8">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="screen">Pantalla</div> 
+                                </div> 
+                                 <div class="row">
+                                    <div class="col-xs-6 col-md-4" ng-repeat="(row, values) in columns">
+                                        <div class="cinema-block">Bloque {{row}}</div> 
+                                        <div class="seatCharts-seat seatCharts available" 
+                                                ng-repeat="(col, val) in values"
+                                                id="identifier-block-{{row}}-seat-{{columns[row][col].seatNumber}}"
+                                                ng-click="processSeat(row, columns[row][col].seatNumber)">
+                                                {{columns[row][col].seatNumber}}
+                                        </div>
+                                    </div>    
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-md-4">
+                            <div class="row">
+                                <div class="information">Información</div> 
+                            </div> 
+                            <div class="row">
+                                <div class="col-xs-6 cinema-titles">Película</div>
+                                <div class="col-xs-6 cinema-description">Gasparin</div> 
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-6 cinema-titles">Hora</div>
+                                <div class="col-xs-6 cinema-description">2:20pm</div> 
+                            </div> 
+                            <div class="row">
+                                <div class="col-xs-6 cinema-titles">Sala</div>
+                                <div class="col-xs-6 cinema-description">8</div> 
+                            </div> 
+                            <div class="row">
+                                <div class="col-xs-6 cinema-titles">Ticketes</div>
+                                <div class="col-xs-6 cinema-description">{{selectedSeats}}</div> 
+                            </div> 
+                            <div class="row">
+                                <div class="col-xs-6 cinema-titles">Total</div>
+                                <div class="col-xs-6 cinema-description">{{total}}</div> 
+                            </div> 
+                            <div class="row">
+                                <div class="information">
+                                    Ticketes comprados:
+                                </div>
+                            </div>
+                            <div class="row">
+                                <i ng-repeat="ticket in myTickets" >
+                                    <li>
+                                        Bloque {{ticket.blockNumber}}
+                                        Asiento {{ticket.seatNumber}}
+                                    </li>
+                                </i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+    </body>
+</html>
