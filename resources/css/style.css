@@ -163,7 +163,7 @@ body, html {
 }
 
 .information {
-  background-color: #27AAE1;
+  background-color: #663399;
   color: #666;
   text-align: center;
   padding: 3px;
@@ -183,10 +183,6 @@ div.seatCharts {
   font-size: 13px;
 }
 
-div.seatCharts-seat.available {
-      background-color: #B9DEA0;
-}
-
 div.seatCharts-seat {
   color: #fff;
   cursor: pointer;
@@ -200,7 +196,8 @@ div.cinema {
 }
 
 .cinema-room {
-  width: 800px;
+  /*width: 800px;*/ /*Habilitar esta linea si se desea mostrar los resultados en la misma página que seat.html*/ 
+  width: 600px;
 }
 
 .cinema-titles {
@@ -218,6 +215,28 @@ div.cinema {
   font-size: 14px;
   text-align: center;
 }
-.processing-seat {
+div.seatCharts-seat.processing-seat {
   background: #ed6a6a;
+}
+div.seatCharts-seat.available {
+  background-color: #B9DEA0;
+}
+div.seatCharts-seat.preference {
+  background-color: #27AAE1;
+}
+div.seatInformation {
+  height: 35px;
+}
+div.seatInformation-header {
+  margin-top: 4%;
+}
+.symbology {
+  margin-top: 10px;
+}
+.btn.btn-default:hover {
+  cursor: pointer;
+}
+.show-totals {
+  float: right;
+  margin-top: 10px;
 }
