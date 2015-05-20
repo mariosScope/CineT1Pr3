@@ -1,0 +1,46 @@
+<div class="container cinema-room">
+    <div class="row">
+        <div class="card">
+            <div class="row" ng-controller="SeatController">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="screen">Pantalla</div> 
+                        </div> 
+                         <div class="row">
+                            <div class="col-xs-6 col-md-4" ng-repeat="(row, values) in columns">
+                                <div class="cinema-block">Bloque {{row}}</div> 
+                                <div ng-class="getCssClassNameBySeatType(row, columns[row][col].seatNumber)" 
+                                        ng-repeat="(col, val) in values"
+                                        id="identifier-block-{{row}}-seat-{{columns[row][col].seatNumber}}"
+                                        ng-click="processSeat(row, columns[row][col].seatNumber)">
+                                        {{columns[row][col].seatNumber}}
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="row">
+                            <div class="information symbology">Simbología</div> 
+                            <div class="col-xs-6 col-md-4 ng-scope seatInformation">
+                                <div ng-class="getCssClassNameBySeatPreferential()"></div>
+                                <div class="seatInformation-header">Preferencial</div>
+                            </div>
+                            <div class="col-xs-6 col-md-4 ng-scope seatInformation">
+                                <div ng-class="getCssClassNameBySeatNormal()"></div>
+                                <div class="seatInformation-header">Normal</div>
+                            </div>
+                            <div class="col-xs-6 col-md-4 ng-scope seatInformation">
+                                <div ng-class="getCssClassNameBySeatProcessing()"></div>
+                                <div class="seatInformation-header">Ocupado</div>
+                            </div>
+                        </div> 
+                        <div class="row show-totals">
+                            <button type="button" class="btn btn-default" ng-click="regresar()">Regresar</button>
+                            <a href="#resultados/{{titulopelicula}}/{{tandapelicula}}" 
+                                class="btn btn-default" role="button">Mostrar Resultados</a> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

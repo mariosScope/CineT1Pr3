@@ -1,13 +1,24 @@
-/*
- * Specific styles of signin component
+.btn-separation-left {
+	margin-left:5px;
+}
+
+.button-row {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+/* classes for form validation: https://docs.angularjs.org/guide/forms
  */
-/*
- * General styles
- */
+ input.ng-invalid {
+	border: rgba(215, 44, 44, 0.6) solid 1px;
+}
+
+
 body, html {
     height: 100%;
-    background-repeat: no-repeat;
-    background-image: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));
+  background: #FFFFFF;
+     padding-top: 70px; 
 }
 
 .check-element {
@@ -46,6 +57,7 @@ body, html {
 
 .login {
   width: 300px;
+  margin-top: -30px;
 }
 
 .profile-img-card {
@@ -196,8 +208,8 @@ div.cinema {
 }
 
 .cinema-room {
-  /*width: 800px;*/ /*Habilitar esta linea si se desea mostrar los resultados en la misma página que seat.html*/ 
   width: 600px;
+  margin-top: -40px;
 }
 
 .cinema-titles {
