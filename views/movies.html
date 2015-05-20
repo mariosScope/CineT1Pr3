@@ -1,0 +1,16 @@
+<div class="row" ng-repeat="pelicula in catalogo">
+    <div class="col-xs-6 col-md-3">
+        <a class="thumbnail">
+            <img ng-src="resources/img/{{pelicula.id}}.jpg" >
+        </a>
+    </div>
+    <div class="caption">
+        <h3>{{pelicula.title}}</h3>
+        <p>{{pelicula.description}}</p>
+        <p>
+            <a href="#movies/{{pelicula.title}}/4" class="btn btn-default" role="button">4:00 pm</a> 
+            <a href="#movies/{{pelicula.title}}/7" class="btn btn-default" role="button">7:00 pm</a> 
+            <a href="#movies/{{pelicula.title}}/9" class="btn btn-default" role="button">9:00 pm</a>
+        </p>
+    </div>
+</div> 
