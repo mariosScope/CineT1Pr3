@@ -17,7 +17,7 @@ app.config(['$routeProvider', function($routeProvider){
     })
     .when('/resultados/:titulo/:tanda', {
       templateUrl : 'views/resultados.html',
-      controller  : 'SeatController'
+      controller  : 'ResultsController'
     })
     .when('/movies', {
       templateUrl : 'views/movies.html',
@@ -36,6 +36,13 @@ app.config(['$routeProvider', function($routeProvider){
     });
 }]);
 
+app.factory('resultadosFactory', function(SeatController){
+    var factory = {};
+    var valores = SeatController;
+    factory.getValores= function(){
+        return valores;
+    };
+};
 app.factory('MoviesCatalog', function($http) {
   var service = {};
 
@@ -304,3 +311,11 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', functio
   }
 
 }]);
+
+app.controller('ResultsController', ['$scope', '$routeParams', '$location','resultadosFactory' , function($scope, $routeParams, $location) {
+    $scope.tandapelicula = $routeParams.tanda;
+    $scope.titulopelicula = $routeParams.titulo;
+    $scope.selectedSe = resultadosFactory.selectedSeats;
+}]);
+
+
