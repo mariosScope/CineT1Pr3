@@ -1,9 +1,22 @@
-/*
- * Specific styles of signin component
+body { padding-top: 70px; }
+
+.btn-separation-left {
+	margin-left:5px;
+}
+
+.button-row {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+
+/* classes for form validation: https://docs.angularjs.org/guide/forms
  */
-/*
- * General styles
- */
+ input.ng-invalid {
+	border: rgba(215, 44, 44, 0.6) solid 1px;
+}
+
+
 body, html {
     height: 100%;
     background-repeat: no-repeat;
@@ -163,7 +176,7 @@ body, html {
 }
 
 .information {
-  background-color: #27AAE1;
+  background-color: #663399;
   color: #666;
   text-align: center;
   padding: 3px;
@@ -183,10 +196,6 @@ div.seatCharts {
   font-size: 13px;
 }
 
-div.seatCharts-seat.available {
-      background-color: #B9DEA0;
-}
-
 div.seatCharts-seat {
   color: #fff;
   cursor: pointer;
@@ -200,7 +209,8 @@ div.cinema {
 }
 
 .cinema-room {
-  width: 800px;
+  /*width: 800px;*/ /*Habilitar esta linea si se desea mostrar los resultados en la misma página que seat.html*/ 
+  width: 600px;
 }
 
 .cinema-titles {
@@ -218,6 +228,28 @@ div.cinema {
   font-size: 14px;
   text-align: center;
 }
-.processing-seat {
+div.seatCharts-seat.processing-seat {
   background: #ed6a6a;
+}
+div.seatCharts-seat.available {
+  background-color: #B9DEA0;
+}
+div.seatCharts-seat.preference {
+  background-color: #27AAE1;
+}
+div.seatInformation {
+  height: 35px;
+}
+div.seatInformation-header {
+  margin-top: 4%;
+}
+.symbology {
+  margin-top: 10px;
+}
+.btn.btn-default:hover {
+  cursor: pointer;
+}
+.show-totals {
+  float: right;
+  margin-top: 10px;
 }
