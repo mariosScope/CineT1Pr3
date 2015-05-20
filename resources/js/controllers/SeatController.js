@@ -11,12 +11,17 @@ var SeatController = function($scope,$http) {
   $scope.total = 0;
   $scope.myTickets = [];
   var countBlock = 3;
+  var cantPreferentialsSeats = 4;
 
   $scope.columns = [];
   for (var block = 0; block < countBlock; block++) {
     var array = [];
-    for(var i=1; i <= totalSeats; i++){
-      array.push({seatNumber:i, blockNumber:block, selected:false});
+    for (var i=1; i <= totalSeats; i++) {
+      var isPreferenceSeat = false;
+      if (i <= cantPreferentialsSeats) { 
+        isPreferenceSeat = true;
+      }
+      array.push({seatNumber:i, blockNumber:block, selected:false, isPreference: isPreferenceSeat});
      }
      $scope.columns.push(array);
   }
@@ -24,9 +29,49 @@ var SeatController = function($scope,$http) {
   /**
   * Calcula el total a pagar por la cantidad de tiquetes comprados
   */
-  $scope.getTotal = function(){
+  $scope.getTotal = function() {
     var ticketValue = 1500;
     $scope.total = ticketValue * $scope.selectedSeats;
+  }
+
+
+  /**
+  * Obtiene el nombre de la clase de css que corresponde al tipo de asiento
+  */
+  $scope.getCssClassNameBySeatType = function(block, seat) {
+    if ($scope.isPreferentialSeat(block, seat)) {
+      return $scope.getCssClassNameBySeatPreferential();
+    } else {
+      return $scope.getCssClassNameBySeatNormal();
+    }
+  }
+
+  /**
+  * Obtiene el nombre de la clase de css que corresponde al tipo de asiento preferencial
+  */  
+  $scope.getCssClassNameBySeatPreferential = function() {
+    return $scope.getCssClassNameBySeat() + " preference";
+  }
+
+  /**
+  * Obtiene el nombre de la clase de css que corresponde al tipo de asiento normal
+  */  
+  $scope.getCssClassNameBySeatNormal = function() {
+    return $scope.getCssClassNameBySeat() +  " available";
+  }
+
+  /**
+  * Obtiene el nombre de la clase de css que corresponde al tipo de asiento procesado
+  */  
+  $scope.getCssClassNameBySeatProcessing = function() {
+    return $scope.getCssClassNameBySeat() + " processing-seat";
+  }
+
+  /**
+  * Obtiene el nombre de la clase de css que utilizan todos los asientos
+  */  
+  $scope.getCssClassNameBySeat = function() {
+    return "seatCharts-seat seatCharts ";
   }
 
   /**
@@ -55,8 +100,8 @@ var SeatController = function($scope,$http) {
   */
   $scope.selectSeat = function(block, seat) {
     var seatIdentifier = $scope.getSeatIdentifier(block, seat);
-    $(seatIdentifier).removeClass("available");
-    $(seatIdentifier).addClass("processing-seat");
+    $(seatIdentifier).removeClass($scope.getSeatAvailableCssClass(block, seat));
+    $(seatIdentifier).addClass($scope.getSeatProcessingCssClass(block, seat));
     $scope.seatSeatSelected(block, seat, true);
     $scope.selectedSeats ++;
     $scope.myTickets.push($scope.getSeat(block, seat)); 
@@ -68,12 +113,30 @@ var SeatController = function($scope,$http) {
   */
   $scope.deselectSeat = function(block, seat) {
     var seatIdentifier = $scope.getSeatIdentifier(block, seat);
-    $(seatIdentifier).removeClass("processing-seat");
-    $(seatIdentifier).addClass("available");
+    $(seatIdentifier).removeClass($scope.getSeatProcessingCssClass(block, seat));
+    $(seatIdentifier).addClass($scope.getSeatAvailableCssClass(block, seat));
     $scope.seatSeatSelected(block, seat, false);
     $scope.selectedSeats --;
     $scope.removeSeat(block, seat);
     $scope.getTotal();
+  }
+
+  /**
+  * Obtiene la clase de css que identifica si el asiento es normal o preferencial
+  */
+  $scope.getSeatAvailableCssClass = function(block, seat){
+    if ($scope.isPreferentialSeat(block, seat)) {
+      return "preference";
+    } else {
+      return "available";
+    }
+  }
+
+  /**
+  * Obtiene la clase de css que identifica si el asiento esta siendo procesado
+  */
+  $scope.getSeatProcessingCssClass = function(block, seat){
+    return "processing-seat";
   }
 
   /**
@@ -139,6 +202,13 @@ var SeatController = function($scope,$http) {
     return $scope.getSeat(block, seat).seatNumber;
   }
 
+  /**
+  * Indica si el asiento es preferencial
+  */
+  $scope.isPreferentialSeat = function(block, seat) {
+    return $scope.getSeat(block, seat).isPreference;
+  }
+
   /*
   * Obtiene el indice del asiento seleccionado
   */
@@ -153,5 +223,9 @@ var SeatController = function($scope,$http) {
     var blockNumber = $scope.getSeatBlockNumber(block, seat);  
     var seatNumber = $scope.getSeatNumber(block, seat); 
     return "#identifier-block-" + blockNumber + "-seat-" + seatNumber;
+  }
+
+  $scope.redirectTotalsPage = function(){
+     window.location.href = "totals.html";
   }
 }
