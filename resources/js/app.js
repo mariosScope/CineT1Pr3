@@ -1,5 +1,13 @@
 var app = angular.module('CineApp', ['ngRoute'])
 
+/*
+Developed by:
+ __.   ._ ,  __. ,          
+(__  _ |,-+-(__ -+- _ .    ,
+.__)(_)|  | .__) | (/, \/\/ 
+
+*/     
+
 //aqui se definen las rutas de la aplicacion, cada ruta define su controlador.
 //para que funcione esto, se debe correr desde el servidor
 app.config(['$routeProvider', function($routeProvider){
@@ -62,4 +70,3 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', functio
   }
 
 }]);
-

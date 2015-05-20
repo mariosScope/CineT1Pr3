@@ -1,0 +1,52 @@
+<html xmlns:ng="http://angularjs.org" id="ng-app" class="ng-app:CineApp" ng-app="CineApp">
+
+    <head>
+        <title>Login</title>
+        <meta charset="UTF-8">
+
+        <link href="resources/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="resources/css/style.css" rel="stylesheet" />
+        <script src="resources/js/lib/angular/angular.js" ng:autobind></script>
+        <script src="resources/js/app.js"></script>
+        <script src="resources/js/services.js"></script>
+
+        <script src="resources/js/controllers/LoginController.js"></script>
+        <script src="resources/js/controllers/SeatController.js"></script>
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="card card-container login" ng-controller="LoginController">
+                <img id="profile-img" class="profile-img-card" src="resources/img/mini-softstew-logo.jpg" />
+                <p id="profile-name" class="profile-name-card"></p>
+
+                <span id="reauth-email" class="reauth-email">Cinema Login</span>
+
+                <form name="myForm">
+
+                    <input type="email" name="input" ng-model="email.text" id="email" class="form-control" placeholder="Correo electrónico" required autofocus/>
+
+                    
+                    <div role="alert">
+
+                    <span class="error" ng-show="myForm.input.$error.required">
+                    Requerido!</span>
+                    <span class="error" ng-show="myForm.input.$error.email">
+                    Formato Inválido!</span>
+                    </div>
+                    
+
+
+                    <input type="password" ng-model="password.text" id="inputPassword" class="form-control" placeholder="Contraseña" required/>
+                    <div id="remember" class="checkbox">
+
+                    </div>
+                    <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit" ng-click="validateForm()">Iniciar Sesión</button>
+
+                </form>
+            </div>
+        </div>
+    </body>
+
+</html>
