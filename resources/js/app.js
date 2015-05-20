@@ -1,3 +1,10 @@
+/*
+Developed by:
+ __.   ._ ,  __. ,          
+(__  _ |,-+-(__ -+- _ .    ,
+.__)(_)|  | .__) | (/, \/\/ 
+
+*/     
 var app = angular.module('CineApp', ['ngRoute'])
 
 //aqui se definen las rutas de la aplicacion, cada ruta define su controlador.
@@ -8,9 +15,17 @@ app.config(['$routeProvider', function($routeProvider){
       templateUrl : 'views/movies.html',
       controller  : 'MoviesViewController'
     })
+    .when('/resultados/:titulo/:tanda', {
+      templateUrl : 'views/resultados.html',
+      controller  : 'SeatController'
+    })
     .when('/movies', {
       templateUrl : 'views/movies.html',
       controller  : 'MoviesViewController'
+    })
+    .when('/cartelera', {
+      templateUrl : 'cartelera.html',
+      controller  : 'LoginController'
     })
     .when('/movies/:titulo/:tanda', {
       templateUrl : 'views/seat.html',
@@ -50,6 +65,14 @@ app.factory('MoviesCatalog', function($http) {
 app.controller('MoviesViewController', ['$scope', 'MoviesCatalog', function($scope, MoviesCatalog) {
   $scope.catalogo = MoviesCatalog.entries;
 
+}]);
+
+app.controller('LoginController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+  $scope.validateForm = function() {
+    if (!angular.isUndefined($scope.email.text) && $scope.password.text.length > 0) {
+      window.location.href = "cartelera.html";
+    }
+  };
 }]);
 
 app.controller('SeatController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
@@ -278,10 +301,6 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', functio
     var blockNumber = $scope.getSeatBlockNumber(block, seat);  
     var seatNumber = $scope.getSeatNumber(block, seat); 
     return "#identifier-block-" + blockNumber + "-seat-" + seatNumber;
-  }
-
-  $scope.redirectTotalsPage = function(){
-     window.location.href = "totals.html";
   }
 
 }]);
