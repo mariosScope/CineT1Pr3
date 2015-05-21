@@ -47,8 +47,8 @@ app.factory('ResultadosFactory', function(){
     factory.postTicket = function(pTicket){
         factory.asientosList.push(pTicket);
     };
-    factory.removeTicket = function(pTicket){
-        factory.asientosList.push(pTicket);
+    factory.removeTicket = function(pIndex){
+        factory.asientosList.remove(pIndex);
     };
     factory.getAsientosList = function(){
         return factory.asientosList;
