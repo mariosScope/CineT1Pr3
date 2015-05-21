@@ -1,7 +1,7 @@
 <div class="container cinema-room">
     <div class="row">
         <div class="card">
-            <div class="row" ng-controller="SeatController">
+            <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-12">
                         <div class="row">
@@ -21,7 +21,7 @@
                         <div class="row">
                             <div class="information symbology">Simbología</div> 
                             <div class="col-xs-6 col-md-4 ng-scope seatInformation">
-                                <div ng-class="getCssClassNameBySeatPreferential()"></div>
+                                <div id="preferential-seat"  class="ng-binding ng-scope seatCharts-seat seatCharts preference"></div>
                                 <div class="seatInformation-header">Preferencial</div>
                             </div>
                             <div class="col-xs-6 col-md-4 ng-scope seatInformation">
@@ -35,8 +35,7 @@
                         </div> 
                         <div class="row show-totals">
                             <button type="button" class="btn btn-default" ng-click="regresar()">Regresar</button>
-                            <a href="#resultados/{{titulopelicula}}/{{tandapelicula}}" 
-                                class="btn btn-default" role="button">Mostrar Resultados</a> 
+                            <button type="button" class="btn btn-default" ng-click="mostrarResultados()">Mostrar Resultados</button>
                         </div>
                     </div>
                 </div>

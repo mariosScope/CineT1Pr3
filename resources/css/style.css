@@ -252,3 +252,9 @@ div.seatInformation-header {
   float: right;
   margin-top: 10px;
 }
+.totals-container {
+  width: 500px;
+}
+.result-buttons {
+  margin-top: 20px;
+}
