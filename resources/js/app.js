@@ -56,6 +56,9 @@ app.factory('ResultadosFactory', function(){
     factory.getCantidadAsientos = function(){
         return factory.getAsientosList().length;
     };
+    factory.clearAsientosList = function(){
+        factory.asientosList = [];
+    };
     
     return factory;
     
@@ -145,6 +148,7 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location',
 
   $scope.regresar = function() {
     AsientosFactory.clearAsientosList();
+    ResultadosFactory.clearAsientosList();
     $location.path('/'); 
   }
 
