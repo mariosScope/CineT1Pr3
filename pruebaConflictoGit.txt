@@ -1,4 +1,6 @@
-## Soy una linea diferente ¿Cuál es la correcta?
+﻿## Soy una linea diferente ¿Cuál es la correcta?
+=======
+## Espero tener un conflicto en mi AHORA SI UN CONFLICTO para conocer como resolverlos (CONFLICTO) =( 
 ## Sin conflicto
 ## Sin conflicto
 ## Sin conflicto
