@@ -27,7 +27,7 @@ app.config(['$routeProvider', function($routeProvider){
       templateUrl : 'cartelera.html',
       controller  : 'LoginController'
     })
-    .when('/movies/:titulo/:tanda', {
+    .when('/seat/:titulo/:tanda', {
       templateUrl : 'views/seat.html',
       controller  : 'SeatController'
     })
@@ -38,21 +38,27 @@ app.config(['$routeProvider', function($routeProvider){
 
 app.factory('ResultadosFactory', function(){
     var factory = {};
-    factory.asientos = {};
-    factory.cantidadAsientos=0;
-    var total=0;
+    factory.asientosList = [];
     
-    factory.getPrecioTotal= function(){
+    factory.getPrecioTotal = function(){
         var entrada = 1500;
-        total = entrada * factory.cantidadAsientos;
-        return total
+        return (entrada * factory.getCantidadAsientos());
     };
-    factory.guardarValores= function(pCantAsientos, pAsientosSelecc){
-        factory.cantidadAsientos = pCantAsientos;
-        factory.asientos = pAsientosSelecc;
+    factory.postTicket = function(pTicket){
+        factory.asientosList.push(pTicket);
+    };
+    factory.removeTicket = function(pTicket){
+        factory.asientosList.push(pTicket);
+    };
+    factory.getAsientosList = function(){
+        return factory.asientosList;
+    };   
+    factory.getCantidadAsientos = function(){
+        return factory.getAsientosList().length;
     };
     
     return factory;
+    
 });
 app.factory('MoviesCatalog', function($http) {
   var service = {};
@@ -199,29 +205,25 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', 'Result
     var seatIdentifier = $scope.getSeatIdentifier(block, seat);
     $(seatIdentifier).removeClass($scope.getSeatAvailableCssClass(block, seat));
     $(seatIdentifier).addClass($scope.getSeatProcessingCssClass(block, seat));
-    $scope.seatSeatSelected(block, seat, true);
-    $scope.selectedSeats ++;
-    $scope.myTickets.push($scope.getSeat(block, seat)); 
-    $scope.getTotal();
+    $scope.setSeatSelected(block, seat, true);
+      ResultadosFactory.postTicket($scope.getSeat(block, seat));
   }
 
   /**
   *Procesa el asiento ocupado y lo marca como habilitado
   */
   $scope.deselectSeat = function(block, seat) {
-    var seatIdentifier = $scope.getSeatIdentifier(block, seat);
-    $(seatIdentifier).removeClass($scope.getSeatProcessingCssClass(block, seat));
-    $(seatIdentifier).addClass($scope.getSeatAvailableCssClass(block, seat));
-    $scope.seatSeatSelected(block, seat, false);
-    $scope.selectedSeats --;
-    $scope.removeSeat(block, seat);
-    $scope.getTotal();
+      var seatIdentifier = $scope.getSeatIdentifier(block, seat);
+      $(seatIdentifier).removeClass($scope.getSeatProcessingCssClass(block, seat));
+      $(seatIdentifier).addClass($scope.getSeatAvailableCssClass(block, seat));
+      $scope.setSeatSelected(block, seat, false);
+      ResultadosFactory.removeTicket($scope.getIndexToRemove(block, seat));
   }
 
   /**
   * Obtiene la clase de css que identifica si el asiento es normal o preferencial
   */
-  $scope.getSeatAvailableCssClass = function(block, seat){
+  $scope.getSeatAvailableCssClass = function(block, seat) {
     if ($scope.isPreferentialSeat(block, seat)) {
       return "preference";
     } else {
@@ -281,7 +283,7 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', 'Result
   /*
   * Cambia el estado del asiento
   */
-  $scope.seatSeatSelected = function(block, seat, condition) {
+  $scope.setSeatSelected = function(block, seat, condition) {
     $scope.getSeat(block, seat).selected = condition;
   }
 
@@ -327,10 +329,15 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', 'Result
 app.controller('ResultsController', ['$scope', '$routeParams', '$location', 'ResultadosFactory',function($scope, $routeParams, $location , ResultadosFactory ) {
     $scope.tandapelicula = $routeParams.tanda;
     $scope.titulopelicula = $routeParams.titulo;
-    //Descomenta el uso del factory y el paso de este por parametros y 
-    //en html se despicha todo
-    $scope.selectedAsses = ResultadosFactory.cantidadAsientos;
+    
+    $scope.cantidadAsientos = ResultadosFactory.getCantidadAsientos();
     $scope.total = ResultadosFactory.getPrecioTotal();
+    
+    $scope.tickets = ResultadosFactory.getAsientosList();
+    
+    $scope.regresar = function() {
+        $location.path('/seat/:titulo/:tanda'); //cambia de ruta
+    }
 }]);
 
 
