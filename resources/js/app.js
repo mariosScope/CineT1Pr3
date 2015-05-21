@@ -38,11 +38,21 @@ app.config(['$routeProvider', function($routeProvider){
 
 app.factory('ResultadosFactory', function(){
     var factory = {};
-    var valores = 22;
-    factory.getValores= function(){
-        
-        return factory;
+    factory.asientos = {};
+    factory.cantidadAsientos=0;
+    var total=0;
+    
+    factory.getPrecioTotal= function(){
+        var entrada = 1500;
+        total = entrada * factory.cantidadAsientos;
+        return total
     };
+    factory.guardarValores= function(pCantAsientos, pAsientosSelecc){
+        factory.cantidadAsientos = pCantAsientos;
+        factory.asientos = pAsientosSelecc;
+    };
+    
+    return factory;
 });
 app.factory('MoviesCatalog', function($http) {
   var service = {};
@@ -83,7 +93,7 @@ app.controller('LoginController', ['$scope', '$routeParams', '$location', functi
   };
 }]);
 
-app.controller('SeatController', ['$scope', '$routeParams', '$location', function($scope, $routeParams, $location) {
+app.controller('SeatController', ['$scope', '$routeParams', '$location', 'ResultadosFactory', function($scope, $routeParams, $location, ResultadosFactory) {
 
   $scope.tandapelicula = $routeParams.tanda;
   $scope.titulopelicula = $routeParams.titulo; //angular.toJson({titulo: $routeParams.titulo });
@@ -176,6 +186,7 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', functio
   $scope.processSeat = function(block, seat) {
     if ($scope.isSeatSelected(block, seat)) {
       $scope.deselectSeat(block, seat);
+        
     } else {
       $scope.selectSeat(block, seat);
     }
@@ -313,12 +324,13 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', functio
 
 }]);
 
-app.controller('ResultsController', ['$scope', '$routeParams', '$location', /*'ResultadosFactory',*/function($scope, $routeParams, $location /*, ResultadosFactory*/ ) {
+app.controller('ResultsController', ['$scope', '$routeParams', '$location', 'ResultadosFactory',function($scope, $routeParams, $location , ResultadosFactory ) {
     $scope.tandapelicula = $routeParams.tanda;
     $scope.titulopelicula = $routeParams.titulo;
     //Descomenta el uso del factory y el paso de este por parametros y 
     //en html se despicha todo
-    $scope.selectedAsses = 22;//ResultadosFactory.valores;
+    $scope.selectedAsses = ResultadosFactory.cantidadAsientos;
+    $scope.total = ResultadosFactory.getPrecioTotal();
 }]);
 
 
