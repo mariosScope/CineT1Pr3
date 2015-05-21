@@ -36,13 +36,14 @@ app.config(['$routeProvider', function($routeProvider){
     });
 }]);
 
-app.factory('resultadosFactory', function(SeatController){
+app.factory('ResultadosFactory', function(){
     var factory = {};
-    var valores = SeatController;
+    var valores = 22;
     factory.getValores= function(){
-        return valores;
+        
+        return factory;
     };
-};
+});
 app.factory('MoviesCatalog', function($http) {
   var service = {};
 
@@ -312,10 +313,12 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', functio
 
 }]);
 
-app.controller('ResultsController', ['$scope', '$routeParams', '$location','resultadosFactory' , function($scope, $routeParams, $location) {
+app.controller('ResultsController', ['$scope', '$routeParams', '$location', /*'ResultadosFactory',*/function($scope, $routeParams, $location /*, ResultadosFactory*/ ) {
     $scope.tandapelicula = $routeParams.tanda;
     $scope.titulopelicula = $routeParams.titulo;
-    $scope.selectedSe = resultadosFactory.selectedSeats;
+    //Descomenta el uso del factory y el paso de este por parametros y 
+    //en html se despicha todo
+    $scope.selectedAsses = 22;//ResultadosFactory.valores;
 }]);
 
 
