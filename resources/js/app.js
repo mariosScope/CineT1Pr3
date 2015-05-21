@@ -60,6 +60,40 @@ app.factory('ResultadosFactory', function(){
     return factory;
     
 });
+
+app.factory('AsientosFactory', function () {
+  var factory = {}; 
+  factory.asientosList = [];
+
+  factory.getAsientosList = function() {
+    var countBlock = 3;
+    var totalSeats = 20;
+    var cantPreferentialsSeats = 4;
+
+    if(factory.asientosList.length == 0) {
+      for (var block = 0; block < 3; block++) {
+        var array = [];
+        for (var i=1 ; i <= totalSeats; i++) {
+          var isPreferenceSeat = false;
+          if (i <= cantPreferentialsSeats) { 
+            isPreferenceSeat = true;
+          }
+          array.push({seatNumber:i, blockNumber:block, selected:false, isPreference: isPreferenceSeat});
+        }
+        factory.asientosList.push(array);
+      }
+    }
+    return factory.asientosList;
+  };   
+
+  factory.clearAsientosList = function() {
+    var size = factory.asientosList.length ;
+    factory.asientosList = [];
+  };
+
+  return factory;
+});
+
 app.factory('MoviesCatalog', function($http) {
   var service = {};
 
@@ -99,49 +133,37 @@ app.controller('LoginController', ['$scope', '$routeParams', '$location', functi
   };
 }]);
 
-app.controller('SeatController', ['$scope', '$routeParams', '$location', 'ResultadosFactory', function($scope, $routeParams, $location, ResultadosFactory) {
-
+app.controller('SeatController', ['$scope', '$routeParams', '$location', 
+  'ResultadosFactory', 'AsientosFactory',
+    function($scope, $routeParams, $location, ResultadosFactory, AsientosFactory) {
   $scope.tandapelicula = $routeParams.tanda;
-  $scope.titulopelicula = $routeParams.titulo; //angular.toJson({titulo: $routeParams.titulo });
-
-  var totalSeats = 20;
+  $scope.titulopelicula = $routeParams.titulo; 
   $scope.selectedSeats = 0;
   $scope.total = 0;
   $scope.myTickets = [];
-  var countBlock = 3;
-  var cantPreferentialsSeats = 4;
-
-  $scope.columns = [];
-  for (var block = 0; block < countBlock; block++) {
-    var array = [];
-    for (var i=1; i <= totalSeats; i++) {
-      var isPreferenceSeat = false;
-      if (i <= cantPreferentialsSeats) { 
-        isPreferenceSeat = true;
-      }
-      array.push({seatNumber:i, blockNumber:block, selected:false, isPreference: isPreferenceSeat});
-     }
-     $scope.columns.push(array);
-  }
-
-  /**
-  * Calcula el total a pagar por la cantidad de tiquetes comprados
-  */
-  $scope.getTotal = function() {
-    var ticketValue = 1500;
-    $scope.total = ticketValue * $scope.selectedSeats;
-  }
-
+  $scope.columns = AsientosFactory.getAsientosList();
 
   $scope.regresar = function() {
-    $location.path('/'); //cambia de ruta
+    AsientosFactory.clearAsientosList();
+    $location.path('/'); 
+  }
+
+  $scope.mostrarResultados = function() {
+    if (ResultadosFactory.getCantidadAsientos() > 0) {
+      var url = "/resultados/" + $scope.titulopelicula  + "/" + $scope.tandapelicula ;
+      $location.path(url);
+    } else {
+      alert("Seleccione al menos un asiento");
+    }
   }
 
   /**
   * Obtiene el nombre de la clase de css que corresponde al tipo de asiento
   */
   $scope.getCssClassNameBySeatType = function(block, seat) {
-    if ($scope.isPreferentialSeat(block, seat)) {
+    if ($scope.getSeat(block, seat).selected){
+      return $scope.getCssClassNameBySeatProcessing();
+    } else if ($scope.isPreferentialSeat(block, seat)) {
       return $scope.getCssClassNameBySeatPreferential();
     } else {
       return $scope.getCssClassNameBySeatNormal();
@@ -192,7 +214,6 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', 'Result
   $scope.processSeat = function(block, seat) {
     if ($scope.isSeatSelected(block, seat)) {
       $scope.deselectSeat(block, seat);
-        
     } else {
       $scope.selectSeat(block, seat);
     }
@@ -206,18 +227,18 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', 'Result
     $(seatIdentifier).removeClass($scope.getSeatAvailableCssClass(block, seat));
     $(seatIdentifier).addClass($scope.getSeatProcessingCssClass(block, seat));
     $scope.setSeatSelected(block, seat, true);
-      ResultadosFactory.postTicket($scope.getSeat(block, seat));
+    ResultadosFactory.postTicket($scope.getSeat(block, seat));
   }
 
   /**
   *Procesa el asiento ocupado y lo marca como habilitado
   */
   $scope.deselectSeat = function(block, seat) {
-      var seatIdentifier = $scope.getSeatIdentifier(block, seat);
-      $(seatIdentifier).removeClass($scope.getSeatProcessingCssClass(block, seat));
-      $(seatIdentifier).addClass($scope.getSeatAvailableCssClass(block, seat));
-      $scope.setSeatSelected(block, seat, false);
-      ResultadosFactory.removeTicket($scope.getIndexToRemove(block, seat));
+    var seatIdentifier = $scope.getSeatIdentifier(block, seat);
+    $(seatIdentifier).removeClass($scope.getSeatProcessingCssClass(block, seat));
+    $(seatIdentifier).addClass($scope.getSeatAvailableCssClass(block, seat));
+    $scope.setSeatSelected(block, seat, false);
+    ResultadosFactory.removeTicket($scope.getIndexToRemove(block, seat));
   }
 
   /**
@@ -256,14 +277,6 @@ app.controller('SeatController', ['$scope', '$routeParams', '$location', 'Result
       }
     }
     return index;
-  }
-
-  /**
-  * Elimina un asiento seleccionado de la coleccion que indica todos los 
-  * asiento seleccionados
-  */
-  $scope.removeSeat = function (block, seat) {
-    $scope.myTickets.remove($scope.getIndexToRemove(block, seat));
   }
 
   /**
@@ -336,7 +349,9 @@ app.controller('ResultsController', ['$scope', '$routeParams', '$location', 'Res
     $scope.tickets = ResultadosFactory.getAsientosList();
     
     $scope.regresar = function() {
-        $location.path('/seat/:titulo/:tanda'); //cambia de ruta
+      var url = "/seat/" + $scope.titulopelicula  + "/" + $scope.tandapelicula ;
+      $location.path(url);
+      //  $location.path('/seat/:titulo/:tanda'); //cambia de ruta
     }
 }]);
 
